@@ -24,9 +24,11 @@ function! s:_reset()
 	let s:verbosefiles = []
 endfunction
 
-
 function! s:command(cmd, ...)
-	call extend(l:, get(a:, 1, {}))
+	let s:_dict = get(a:, 1, {})
+	for s:_key in keys(s:_dict)
+		let {s:key} = s:_dict[s:key]
+	endfor
 	call s:_verbosefile_push(tempname())
 	redir =>result
 	execute "silent" a:cmd

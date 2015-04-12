@@ -1,0 +1,40 @@
+scriptencoding utf-8
+Describe Keymapping
+
+  let s:V = vital#of('vital')
+  let K = s:V.import('Palette.Keymapping')
+
+  Context .escape_special_key
+    It escape special keys
+      Assert Equals(K.escape_special_key("<C-r"), "<C-r")
+      Assert Equals(K.escape_special_key("<C->"), "<C->")
+      Assert Equals(K.escape_special_key("<C-r>"), "\<C-r>")
+      Assert Equals(K.escape_special_key("<Down>"), "\<Down>")
+      Assert Equals(K.escape_special_key("<A-c>"), "\<A-c>")
+      Assert Equals(K.escape_special_key("<A-c><A>D>"), "\<A-c><A>D>")
+    End
+  End
+
+  Context .parse_lhs
+    It parse lhs mapping
+      Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG"), "<C-A>")
+      Assert Equals(K.parse_lhs("n  <Space><Space><CR> * :SecretEdit<CR>"), "<Space><Space><CR>")
+      Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG", "x"), "<C-A>")
+      Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG", "n"), "")
+      Assert Equals(K.parse_lhs("x  S             <Plug>VSurround"), "S")
+    End
+  End
+
+  Context keymapping
+    It handle cnoremap
+      cnoremap <Plug>(vital-palette-keymapping-test) vital-palette-keymapping-test
+      Assert True(index(K.lhs_key_list("c"), "\<Plug>(vital-palette-keymapping-test)") != -1)
+      Assert True(index(K.rhs_key_list("c"), "vital-palette-keymapping-test") != -1)
+      Assert True(len(filter(K.rhs_key_list(), "v:val == ''")) == 0)
+      cunmap <Plug>(vital-palette-keymapping-test)
+    End
+  End
+
+
+End
+

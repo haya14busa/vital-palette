@@ -12,6 +12,7 @@ Describe Keymapping
       Assert Equals(K.escape_special_key("<Down>"), "\<Down>")
       Assert Equals(K.escape_special_key("<A-c>"), "\<A-c>")
       Assert Equals(K.escape_special_key("<A-c><A>D>"), "\<A-c><A>D>")
+      Assert Equals(K.escape_special_key("<^?>"), "\<C-?>")
     End
   End
 
@@ -22,6 +23,34 @@ Describe Keymapping
       Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG", "x"), "<C-A>")
       Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG", "n"), "")
       Assert Equals(K.parse_lhs("x  S             <Plug>VSurround"), "S")
+
+
+      Assert Equals(K.parse_lhs("!  ñ             aa"), "ñ")
+      Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG"), "<C-A>")
+      Assert Equals(K.parse_lhs("n  <Space><Space><CR> * :SecretEdit<CR>"), "<Space><Space><CR>")
+      Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG", "x"), "<C-A>")
+      Assert Equals(K.parse_lhs("x  <C-A>       * <C-C>ggVG", "n"), "")
+      Assert Equals(K.parse_lhs("x  S             <Plug>VSurround"), "S")
+      Assert Equals(K.parse_lhs("x  S             <Plug>VSurround"), "S")
+      Assert Equals(K.parse_lhs("x  S <Plug>VSurround", "x"), "S")
+      Assert Equals(K.parse_lhs("n  S <Plug>VSurround", "x"), "")
+      Assert Equals(K.parse_lhs("nos<Plug>(easymotion-B) * :<C-U>call EasyMotion#WBW(0,1)<CR>"), '<Plug>(easymotion-B)')
+
+      Assert Equals(K.parse_lhs("!  S <Plug>VSurround", "c"), "S")
+      Assert Equals(K.parse_lhs("!  S <Plug>VSurround", "i"), "S")
+      Assert Equals(K.parse_lhs("!  S <Plug>VSurround", "!"), "S")
+
+      Assert Equals(K.parse_lhs("c  S <Plug>VSurround", "c"), "S")
+      Assert Equals(K.parse_lhs("c  S <Plug>VSurround", "i"), "S")
+      Assert Equals(K.parse_lhs("c  S <Plug>VSurround", "!"), "S")
+
+      Assert Equals(K.parse_lhs("i  S <Plug>VSurround", "c"), "S")
+      Assert Equals(K.parse_lhs("i  S <Plug>VSurround", "i"), "S")
+      Assert Equals(K.parse_lhs("i  S <Plug>VSurround", "!"), "S")
+
+      Assert Equals(K.parse_lhs("n  S <Plug>VSurround", "c"), "")
+      Assert Equals(K.parse_lhs("n  S <Plug>VSurround", "i"), "")
+      Assert Equals(K.parse_lhs("n  S <Plug>VSurround", "!"), "")
     End
   End
 
